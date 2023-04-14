@@ -2,11 +2,11 @@ import numpy
 import numpy as np
 
 """
-       1.converting to row echelon form
-       2.converting to reduced row echelon form
-        a.making all the leading non-zero numbers equal to 1
-        b.making the columns containing the leading coefficients to be equal to zero except the leading coefficient itself
-       """
+1.converting to row echelon form
+2.converting to reduced row echelon form
+    a.making all the leading non-zero numbers equal to 1
+    b.making the columns containing the leading coefficients to be equal to zero except the leading coefficient itself
+"""
 
 
 class LinearEqnSolver:
@@ -19,6 +19,7 @@ class LinearEqnSolver:
         # assigning the sub-matrix of the 2 rows to the reverse order or it
         self.equations[[r1, r2], :] = self.equations[[r2, r1], :]
         print(f"R{r1} <-> R{r2}")
+        self.display()
 
     def sort(self):
         """
@@ -90,7 +91,7 @@ class LinearEqnSolver:
             return True
 
     def display(self):
-        print(np.array_str(self.equations, precision=3, suppress_small=True))
+        print(np.array_str(self.equations))#, precision=3, suppress_small=True))
 
     def add(self, place: int, r1: int, k: float, r2: int):
         for j in range(0, self.c):
@@ -98,7 +99,7 @@ class LinearEqnSolver:
 
     def mult(self, r1: int, k: float):
         for j in range(0, self.c):
-            self.equations[r1][j] *= k
+            self.equations[r1][j] = self.equations[r1][j] * k
 
     def solve(self):
         self.display()
@@ -106,25 +107,38 @@ class LinearEqnSolver:
         # 1
         for i in range(0, self.r - 1):
             self.sort()
-
             for j in range(0, self.c - 1):
                 # is variable != 0? then make everything below this leading coefficient equal to zero
                 if self.equations[i][j] != 0:
                     for I in range(i + 1, self.r):
                         if self.equations[I][j] != 0:  # it has found a number !=0 below it
                             # rowI = rowI + [rowi * (1 / element below it) * -leading coefficient(of i))]
-                            print(f"R{I} = R{I} + (R{i} * (-{self.equations[I][j]} /{self.equations[i][j]})")
+                            print(f"R{I} = R{I} + (-{self.equations[I][j]} /{self.equations[i][j]})*R{i}")
                             self.add(I, I, -1 * self.equations[I][j] / self.equations[i][j], i)
-                            break  # break from the inner loop
+                            self.display()
+                    break  # break from the inner loop
 
         self.sort()
         self.check_contradiction()
         self.check_sig()
+        print("1. converted to row echelon form\n")
+
+        # 2.a
+        for i in range(0, self.r):
+            for j in range(0, self.c - 1):
+                if self.equations[i][j] != 0:  # checking for non-zero leading element
+                    if self.equations[i][j] != 1:  # if leading element equal to 1, we don't do anything to that row
+                        print(f"R{i}=(1/{self.equations[i][j]})*R{i}")
+                        self.mult(i, 1.0 / self.equations[i][j])  # we want the leading element to equal 1
+                        self.display()
+                    break
+
+        print("\n 2.a all non-zero leading numbers = 1")
         self.display()
-        print("converted to row echelon form")
 
 
 
-eqns = np.array([[0, 2, 2], [1, 3, 3]])
-a = LinearEqnSolver(eqns, 2, 2)
+
+eqns = np.array([[0.0, 2.0, 2.0], [2.0, 3.0, 3.0]]) # only pass in float values
+a = LinearEqnSolver(eqns, 2, 3)
 a.solve()
