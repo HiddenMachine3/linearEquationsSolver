@@ -10,8 +10,11 @@ import numpy as np
 
 
 class LinearEqnSolver:
-    def __init__(self, equations, r, c):
-        self.equations = equations
+    def __init__(self, equations: np.ndarray, r: int, c: int):
+        if equations.dtype != np.float:
+            self.equations = equations.astype(numpy.float32)
+        else:
+            self.equations = equations
         self.r = r
         self.c = c
 
@@ -119,11 +122,11 @@ class LinearEqnSolver:
                     break  # break from the inner loop
 
         self.sort()
-        if(self.check_contradiction()):
+        if (self.check_contradiction()):
             print("No Solutions")
             return
 
-        if(self.check_sig()):
+        if (self.check_sig()):
             return
 
         print("1. converted to row echelon form\n")
@@ -162,7 +165,7 @@ p+4q-r+2s+t=8
 2p+3q+4r+4s-t=30
 """
 eqns = np.array([
-    [1.0, 1.0, 2.0, 1, 2, 15],
+    [1, 1, 2, 1, 2, 15],
     [1, 4, -1, 2, 1, 8],
     [3, -2, 1, 3, 4, 22],
     [-1, -1, 3, 1, 2, 5],
