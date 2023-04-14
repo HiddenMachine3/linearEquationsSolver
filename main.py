@@ -141,9 +141,10 @@ class LinearEqnSolver:
             for j in range(0, self.c - 1):
                 if self.equations[i][j] == 1:  # if the current element is a leading 1
                     for I in range(i - 1, -1, -1):  # we go on making the elements above equal to zero
-                        print(f"R{I} = R{I} + (-{self.equations[I][j]} /{self.equations[i][j]})*R{i}")
-                        self.add(I, I, self.equations[I][j] * -1, i)
-                        self.display()
+                        if(self.equations[I][j] != 0):
+                            print(f"R{I} = R{I} + (-{self.equations[I][j]} /{self.equations[i][j]})*R{i}")
+                            self.add(I, I, self.equations[I][j] * -1, i)
+                            self.display()
 
                     break
 
