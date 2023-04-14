@@ -91,7 +91,7 @@ class LinearEqnSolver:
             return True
 
     def display(self):
-        print(np.array_str(self.equations))#, precision=3, suppress_small=True))
+        print(np.array_str(self.equations))  # , precision=3, suppress_small=True))
 
     def add(self, place: int, r1: int, k: float, r2: int):
         for j in range(0, self.c):
@@ -136,9 +136,18 @@ class LinearEqnSolver:
         print("\n 2.a all non-zero leading numbers = 1")
         self.display()
 
+        # 2.b
+        for i in range(1, self.r):
+            for j in range(0, self.c - 1):
+                if self.equations[i][j] == 1:  # if the current element is a leading 1
+                    for I in range(i - 1, -1, -1):  # we go on making the elements above equal to zero
+                        print(f"R{I} = R{I} + (-{self.equations[I][j]} /{self.equations[i][j]})*R{i}")
+                        self.add(I, I, self.equations[I][j] * -1, i)
+                        self.display()
+
+                    break
 
 
-
-eqns = np.array([[0.0, 2.0, 2.0], [2.0, 3.0, 3.0]]) # only pass in float values
+eqns = np.array([[0.0, 2.0, 2.0], [2.0, 3.0, 3.0]])  # only pass in float values
 a = LinearEqnSolver(eqns, 2, 3)
 a.solve()
