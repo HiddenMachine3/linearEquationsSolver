@@ -148,6 +148,19 @@ class LinearEqnSolver:
                     break
 
 
-eqns = np.array([[0.0, 2.0, 2.0], [2.0, 3.0, 3.0]])  # only pass in float values
-a = LinearEqnSolver(eqns, 2, 3)
+"""
+p+q+2r+s+2t=15
+p+4q-r+2s+t=8
+3p-2q+r+3s+4t=22
+-p-q+3r+s+2t=5
+2p+3q+4r+4s-t=30
+"""
+eqns = np.array([
+    [1, 1, 2, 1, 2, 15],
+    [1, 4, -1, 2, 1, 8],
+    [3, -2, 1, 3, 4, 22],
+    [-1, -1, 3, 1, 2, 5],
+    [2, 3, 4, 4, -1, 30]
+])  # only pass in float values
+a = LinearEqnSolver(eqns, 5, 6)
 a.solve()
