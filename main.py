@@ -119,8 +119,13 @@ class LinearEqnSolver:
                     break  # break from the inner loop
 
         self.sort()
-        self.check_contradiction()
-        self.check_sig()
+        if(self.check_contradiction()):
+            print("No Solutions")
+            return
+
+        if(self.check_sig()):
+            return
+
         print("1. converted to row echelon form\n")
 
         # 2.a
@@ -141,7 +146,7 @@ class LinearEqnSolver:
             for j in range(0, self.c - 1):
                 if self.equations[i][j] == 1:  # if the current element is a leading 1
                     for I in range(i - 1, -1, -1):  # we go on making the elements above equal to zero
-                        if(self.equations[I][j] != 0):
+                        if (self.equations[I][j] != 0):
                             print(f"R{I} = R{I} + (-{self.equations[I][j]} /{self.equations[i][j]})*R{i}")
                             self.add(I, I, self.equations[I][j] * -1, i)
                             self.display()
@@ -163,5 +168,6 @@ eqns = np.array([
     [-1, -1, 3, 1, 2, 5],
     [2, 3, 4, 4, -1, 30]
 ])  # only pass in float values
+# WARNING: only pass in float numpy arrays, passing in int numpy arrays results in integer math inside numpy
 a = LinearEqnSolver(eqns, 5, 6)
 a.solve()
